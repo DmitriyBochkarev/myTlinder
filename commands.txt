@@ -1,0 +1,17 @@
+Установим Django в виртуальное окружение с помощью менеджера pip:
+python -m venv venv_meeter
+venv_meeter\Scripts\activate.bat
+pip install django
+
+django-admin startproject my_site
+cd my_site
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py startapp users
+pip install django-crispy-forms
+pip install crispy-bootstrap4
+pip install pillow
+
+https://github.com/revsys/django-friendship
+pip install django-friendship
