@@ -26,13 +26,15 @@ from .models import Profile
 
 urlpatterns = [
     path('', user_views.index, name='index'),
+    path('match', user_views.match, name='match'),
     path('about', user_views.about, name='about'),
     path('register/', user_views.register, name='register'),
     path('profile/', user_views.profile, name='profile'),
     path('profile_update/', user_views.profile_update, name='profile-update'),
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
-    path('<pk>', DetailView.as_view(model=Profile, template_name="users/profile_detail.html")),
+    path('<int:pk>', DetailView.as_view(model=Profile, template_name="users/profile_detail.html")),
+    path('<int:pk>/match_create', user_views.match_create, name='match-create'),
 
 
 ]

@@ -1,7 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Profile
+from .models import Profile, Friendship
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
 
 
 class UserRegisterForm(UserCreationForm):
@@ -19,6 +26,7 @@ class UserUpdateForm(forms.ModelForm):
         model = User
         fields = ['username', 'email']
 
+
 class ProfileUpdateForm(forms.ModelForm):
 
     class Meta:
@@ -26,6 +34,13 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image', 'gender', 'firstname', 'lastname']
 
 
-# FriendshipFormSet = inlineformset_factory(
-# Friend, Friendship, fk_name="from_friend", fields=["to_friend", "length_in_months"]
-# )
+class MatchCreateForm(forms.ModelForm):
+    class Meta:
+        model = Friendship
+        fields = ['from_friend', 'to_friend', 'length_in_months']
+
+    # def form_valid(self, form):
+    #     form.instance.author = self.request.user
+    #     return super().form_valid(form)
+
+

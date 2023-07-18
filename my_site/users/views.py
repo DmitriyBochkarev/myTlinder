@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from .models import Profile
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, MatchCreateForm
+from .models import Profile, Friendship
 from django.contrib.auth.models import User
 from django.views.generic import (
     ListView,
     DetailView,
 )
+
 
 def about(request):
     return render(request, 'users/about.html')
@@ -62,4 +63,28 @@ def index(request):
     return render(request, 'users/index.html', {'all_users': all_users})
 
 
+def match(request):
+    instance = request.user.profile
+    matches = Friendship.objects.filter(from_friend=instance)
+    return render(request, 'users/match.html', {'matches': matches})
 
+
+def match_create(request, **kwargs):
+    if request.method == 'POST':
+        matchform = MatchCreateForm(request.POST, instance=request.user) # означает что форма для меня
+
+        if matchform.is_valid():
+            matchform.save()
+
+            messages.success(request, f'Ваш профиль успешно обновлен.')
+            return redirect('match')
+
+    else:
+        matchform = MatchCreateForm(instance=request.user)
+
+    context = {
+        'matchform': matchform,
+
+    }
+
+    return render(request, 'users/match_create.html', context)

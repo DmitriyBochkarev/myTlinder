@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from PIL import Image, ImageFilter
 from django.utils import timezone
 from django.conf import settings
+from django.urls import reverse
 
 
 GENDER_CHOICES = (
@@ -51,15 +52,13 @@ class Profile(models.Model):
 
 
 
-# class Friendship(models.Model):
-#     from_friend = models.ForeignKey(
-#         Profile,
-#         on_delete=models.CASCADE,
-#         related_name="from_friends",
-#     )
-#     to_friend = models.ForeignKey(
-#         Profile,
-#         on_delete=models.CASCADE,
-#         related_name="friends",
-#     )
-#     length_in_months = models.IntegerField()
+class Friendship(models.Model):
+    from_friend = models.ForeignKey(Profile, blank=True, on_delete=models.CASCADE, related_name="from_friends",)
+    to_friend = models.ForeignKey(Profile, blank=True,on_delete=models.CASCADE,related_name="friends",)
+    length_in_months = models.IntegerField()
+
+    def save(self, *args, **kwargs):
+        super(Friendship, self).save(*args, **kwargs)
+    #
+    # def get_absolute_url(self):
+    #     return reverse('match', kwargs={'pk': self.pk})
