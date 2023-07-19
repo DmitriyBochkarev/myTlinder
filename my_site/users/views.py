@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, MatchCreateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import Profile, Friendship
 from django.contrib.auth.models import User
 from django.views.generic import (
     ListView,
     DetailView,
 )
+from django.forms import inlineformset_factory
 
 
 def about(request):
@@ -69,22 +70,34 @@ def match(request):
     return render(request, 'users/match.html', {'matches': matches})
 
 
+# def match_create(request, **kwargs):
+#     if request.method == 'POST':
+#         matchform = MatchCreateForm(request.POST, instance=request.user)
+#
+#         if matchform.is_valid():
+#             matchform.save()
+#
+#             messages.success(request, f'Ваш профиль успешно обновлен.')
+#             return redirect('match')
+#
+#     else:
+#         matchform = MatchCreateForm(instance=request.user)
+#
+#     context = {
+#         'matchform': matchform,
+#
+#     }
+#
+#     return render(request, 'users/match_create.html', context)
+
 def match_create(request, **kwargs):
-    if request.method == 'POST':
-        matchform = MatchCreateForm(request.POST, instance=request.user)
-
-        if matchform.is_valid():
-            matchform.save()
-
-            messages.success(request, f'Ваш профиль успешно обновлен.')
+    author = Profile.objects.get(pk=request.user.id)
+    BookInlineFormSet = inlineformset_factory(Profile, Friendship, fk_name='from_friend', fields=["to_friend"])
+    if request.method == "POST":
+        formset = BookInlineFormSet(request.POST, instance=author)
+        if formset.is_valid():
+            formset.save()
             return redirect('match')
-
     else:
-        matchform = MatchCreateForm(instance=request.user)
-
-    context = {
-        'matchform': matchform,
-
-    }
-
-    return render(request, 'users/match_create.html', context)
+        formset = BookInlineFormSet(instance=author)
+    return render(request, "users/match_create.html", {"formset": formset})

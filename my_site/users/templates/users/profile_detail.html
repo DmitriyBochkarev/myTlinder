@@ -11,7 +11,7 @@
         </div>
 
 				<div class="form-group">
-				  <a class="btn btn-outline-info" href="{% url 'match-create' profile.id %}">Мэтч</a>
+				  <a class="btn btn-outline-info" href="{% url 'match-create' profile.user.id %}">Мэтч</a>
 			  	</div>
 	</div>
 {% endblock content %}

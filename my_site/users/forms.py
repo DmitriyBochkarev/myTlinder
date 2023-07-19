@@ -34,10 +34,10 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image', 'gender', 'firstname', 'lastname']
 
 
-class MatchCreateForm(forms.ModelForm):
-    class Meta:
-        model = Friendship
-        fields = ['from_friend', 'to_friend']
+# class MatchCreateForm(forms.ModelForm):
+#     class Meta:
+#         model = Friendship
+#         fields = ['from_friend', 'to_friend']
 
     # def form_valid(self, form):
     #     form.instance.author = self.request.user
