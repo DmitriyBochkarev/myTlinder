@@ -71,7 +71,7 @@ def match(request):
 
 def match_create(request, **kwargs):
     if request.method == 'POST':
-        matchform = MatchCreateForm(request.POST, instance=request.user) # означает что форма для меня
+        matchform = MatchCreateForm(request.POST, instance=request.user)
 
         if matchform.is_valid():
             matchform.save()

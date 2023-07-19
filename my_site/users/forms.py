@@ -37,7 +37,7 @@ class ProfileUpdateForm(forms.ModelForm):
 class MatchCreateForm(forms.ModelForm):
     class Meta:
         model = Friendship
-        fields = ['from_friend', 'to_friend', 'length_in_months']
+        fields = ['from_friend', 'to_friend']
 
     # def form_valid(self, form):
     #     form.instance.author = self.request.user

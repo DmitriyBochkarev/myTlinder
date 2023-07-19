@@ -51,11 +51,9 @@ class Profile(models.Model):
             img.save(self.image.path)
 
 
-
 class Friendship(models.Model):
     from_friend = models.ForeignKey(Profile, blank=True, on_delete=models.CASCADE, related_name="from_friends",)
     to_friend = models.ForeignKey(Profile, blank=True,on_delete=models.CASCADE,related_name="friends",)
-    length_in_months = models.IntegerField()
 
     def save(self, *args, **kwargs):
         super(Friendship, self).save(*args, **kwargs)
