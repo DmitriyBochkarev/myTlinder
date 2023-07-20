@@ -11,6 +11,18 @@
         </div>
 
     {% endfor %}
+
+<h1>Мэтчи направленные на меня</h1>
+{% for el in matches_to_me %}
+        <div class="media">
+
+
+			<p class="text-secondary">От кого {{ el.from_friend }}</p>
+			<p class="text-secondary">Кому {{ el.to_friend }}</p>
+
+        </div>
+
+    {% endfor %}
     <div class="pagination justify-content-center">
         {% if is_paginated %}
 

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, MatchCreateForm
 from .models import Profile, Friendship
 from django.contrib.auth.models import User
 from django.views.generic import (
@@ -67,7 +67,8 @@ def index(request):
 def match(request):
     instance = request.user.profile
     matches = Friendship.objects.filter(from_friend=instance)
-    return render(request, 'users/match.html', {'matches': matches})
+    matches_to_me = Friendship.objects.filter(to_friend=instance)
+    return render(request, 'users/match.html', {'matches': matches, 'matches_to_me': matches_to_me})
 
 
 # def match_create(request, **kwargs):
@@ -90,14 +91,45 @@ def match(request):
 #
 #     return render(request, 'users/match_create.html', context)
 
+
+
+
+# def match_create(request, **kwargs):
+#     author = Profile.objects.get(pk=request.user.id)
+#     other = Profile.objects.get(**kwargs)
+#     FriendshipInlineFormSet = inlineformset_factory(Profile, Friendship, fk_name='from_friend', fields=["to_friend"])
+#     if request.method == "POST":
+#         formset = FriendshipInlineFormSet(request.POST, instance=author, **kwargs)
+#         if formset.is_valid():
+#             formset.save()
+#             messages.success(request, f'Ваш профиль успешно обновлен.')
+#             return redirect('match')
+#     else:
+#         formset = FriendshipInlineFormSet(instance=author, **kwargs)
+#     return render(request, "users/match_create.html", {"formset": formset})
+
+
 def match_create(request, **kwargs):
     author = Profile.objects.get(pk=request.user.id)
-    BookInlineFormSet = inlineformset_factory(Profile, Friendship, fk_name='from_friend', fields=["to_friend"])
+    other = Profile.objects.get(**kwargs)
     if request.method == "POST":
-        formset = BookInlineFormSet(request.POST, instance=author)
-        if formset.is_valid():
-            formset.save()
+        matchform = Friendship(from_friend=author, to_friend=other)
+        if Friendship.objects.filter(to_friend=author, from_friend=other) and Friendship.objects.filter(to_friend=other, from_friend=author):
+            messages.success(request, f'У вас уже есть мэтч с {other}.')
+
+            messages.success(request, f'Email {other.user.email}. ')
             return redirect('match')
-    else:
-        formset = BookInlineFormSet(instance=author)
-    return render(request, "users/match_create.html", {"formset": formset})
+        else:
+            matchform.save()
+
+            if Friendship.objects.filter(to_friend=author, from_friend=other):
+                messages.success(request, f'Поздравляем, у вас мэтч с {other}. ')
+                instance = request.profile
+                profile = Profile.objects.filter(user=instance)
+                messages.success(request, f'Email {profile}. ')
+            else:
+                messages.success(request, f'Ваш профиль успешно обновлен.')
+            return redirect('match')
+
+    matchform = MatchCreateForm(request.POST)
+    return render(request, "users/match_create.html")
