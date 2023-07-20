@@ -117,16 +117,16 @@ def match_create(request, **kwargs):
         if Friendship.objects.filter(to_friend=author, from_friend=other) and Friendship.objects.filter(to_friend=other, from_friend=author):
             messages.success(request, f'У вас уже есть мэтч с {other}.')
 
-            messages.success(request, f'Email {other.user.email}. ')
+            messages.success(request, f'Email: {other.user.email}. ')
             return redirect('match')
         else:
             matchform.save()
 
             if Friendship.objects.filter(to_friend=author, from_friend=other):
                 messages.success(request, f'Поздравляем, у вас мэтч с {other}. ')
-                instance = request.profile
+                instance = request.user
                 profile = Profile.objects.filter(user=instance)
-                messages.success(request, f'Email {profile}. ')
+                messages.success(request, f'Email {other.user.email}. ')
             else:
                 messages.success(request, f'Ваш профиль успешно обновлен.')
             return redirect('match')
