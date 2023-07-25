@@ -1,14 +1,11 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, MatchCreateForm
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
 from .models import Profile, Friendship
 from django.contrib.auth.models import User
-from django.views.generic import (
-    ListView,
-    DetailView,
-)
-from django.forms import inlineformset_factory
+
+from django.core.mail import send_mail, BadHeaderError
 
 
 def about(request):
@@ -122,7 +119,7 @@ def match_create(request, **kwargs):
             matchform.save()
 
             if Friendship.objects.filter(to_friend=author, from_friend=other):
-                messages.success(request, f'Поздравляем, у вас мэтч с {other}. Email {other.user.email}.)
+                messages.success(request, f'Поздравляем, у вас мэтч с {other}. Email {other.user.email}.')
             else:
                 messages.success(request, f'У вас пока нет match с {other}. Возможно, он оценит вас позже, когда увидит ваш профиль.')
             return redirect('match')
