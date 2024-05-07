@@ -45,11 +45,29 @@ class Profile(models.Model):
         img.paste(img_logo, (0, 0), img_logo)
         img.save(self.image.path)
 
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+        # if img.height > 300 or img.width > 300:
+        #     output_size = (300, 300)
+        #     img.thumbnail(output_size)
+        #     img.save(self.image.path)
+        def crop_center(img, crop_width: int, crop_height: int) -> Image:
+            """
+            Функция для обрезки изображения по центру.
+            """
+            img_width, img_height = img.size
+            return img.crop(((img_width - crop_width) // 2,
+                                (img_height - crop_height) // 2,
+                                (img_width + crop_width) // 2,
+                                (img_height + crop_height) // 2))
+        def crop_max_square(img):
+            return crop_center(img, min(img.size), min(img.size))
 
+
+        img = crop_max_square(img)
+
+        output_size = (300, 300)
+        img.thumbnail(output_size)
+
+        img.save(self.image.path)
 
 class Friendship(models.Model):
     from_friend = models.ForeignKey(Profile, blank=True, on_delete=models.CASCADE, related_name="from_friends",)
