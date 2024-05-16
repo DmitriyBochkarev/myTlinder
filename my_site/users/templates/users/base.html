@@ -74,7 +74,10 @@
                 <a class="nav-item nav-link" href="{% url 'index' %}">Найти пару</a>
                 <a class="nav-item nav-link" href="{% url 'match' %}">Мэтчи</a>
                 <a class="nav-item nav-link" href="#">Чат</a>
-            	<a class="nav-item nav-link" href="{% url 'logout' %}">Выход</a>
+            	<a class="nav-item nav-link"><form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Выход</button>
+</form></a>
           	{% else %}
             	<a class="nav-item nav-link" href="{% url 'login' %}">Вход</a>
             	<a class="nav-item nav-link" href="{% url 'register' %}">Регистрация</a>
