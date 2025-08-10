@@ -1,0 +1,13 @@
+version: '3'
+services:
+
+  django_runstring:
+    build: .
+    container_name: runstring_container
+    command: python manage.py runserver 0.0.0.0:8082
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8082:8000"
+    restart: always
+
