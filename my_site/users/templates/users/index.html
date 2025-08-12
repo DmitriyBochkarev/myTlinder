@@ -3,8 +3,8 @@
 <h1>Пользователи</h1>
     {% for user in all_users %}
         <div class="media">
-          <a href="hive/users/{{ user.profile.id }}"><img class="rounded-circle article-img" src="{{ user.profile.image.url }}"></a><br>
-            <a class="btn" href="hive/users/{{ user.profile.id }}">{{ user.username }}</a>
+          <a href="/hive/users/{{ user.profile.id }}"><img class="rounded-circle article-img" src="{{ user.profile.image.url }}"></a><br>
+            <a class="btn" href="/hive/users/{{ user.profile.id }}">{{ user.username }}</a>
 			<p class="text-secondary">Имя: {{ user.profile.firstname }}</p>
 			<p class="text-secondary">Фамилия: {{ user.profile.lastname }}</p>
 			<p class="text-secondary">Пол: {{ user.profile.gender }}</p>
