@@ -22,7 +22,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('hive', include('users.urls')),
+    path('hive/', include('users.urls')),
     path('hive/users/', include('users.urls')),
     path('hive/admin/', admin.site.urls),
 
