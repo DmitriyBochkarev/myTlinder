@@ -107,7 +107,7 @@ def match(request):
 
 
 def match_create(request, **kwargs):
-    author = Profile.objects.get(pk=request.user.id)
+    author = Profile.objects.get(pk=request.user.profile.id)
     other = Profile.objects.get(**kwargs)
     if request.method == "POST":
 
